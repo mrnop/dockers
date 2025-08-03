@@ -1,0 +1,10 @@
+# Ignore environment file with sensitive data
+.env.local
+.env.production
+
+# Backup files
+*.backup
+*.sql
+
+# Logs
+*.log
