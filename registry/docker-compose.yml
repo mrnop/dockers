@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  registry:
+    image: registry:2.8.2
+    ports:
+      - "5050:5000"
+    environment:
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /var/lib/registry
+      REGISTRY_HTTP_HEADERS_Access-Control-Allow-Origin: '["http://localhost:8080", "http://registry-ui:8080"]'
+      REGISTRY_HTTP_HEADERS_Access-Control-Allow-Methods: '["GET", "HEAD", "OPTIONS", "DELETE", "PUT"]'
+      REGISTRY_HTTP_HEADERS_Access-Control-Allow-Credentials: '[true]'
+      REGISTRY_HTTP_HEADERS_Access-Control-Allow-Headers: '["Authorization", "Accept", "Content-Type"]'
+      REGISTRY_HTTP_HEADERS_Access-Control-Expose-Headers: '[Docker-Content-Digest]'
+    volumes:
+      - /Volumes/Data/docker/registry/data:/var/lib/registry
+  registry-ui:
+    image: joxit/docker-registry-ui:main
+    ports:
+      - "8080:80"
+    environment:
+      - SINGLE_REGISTRY=true
+      - REGISTRY_TITLE=Docker Registry UI
+      - DELETE_IMAGES=true
+      - SHOW_CONTENT_DIGEST=true
+      - NGINX_PROXY_PASS_URL=http://registry:5050
+      - SHOW_CATALOG_NB_TAGS=true
+      - CATALOG_MIN_BRANCHES=1
+      - CATALOG_MAX_BRANCHES=1
+      - TAGLIST_PAGE_SIZE=100
+      - REGISTRY_SECURED=false
+      - CATALOG_ELEMENTS_LIMIT=1000
+      # - REGISTRY_TITLE=Private Docker Registry
+      # - REGISTRY_URL=http://registry:5050
+      # - DELETE_IMAGES=true
+    depends_on:
+      - registry
+    restart: always
