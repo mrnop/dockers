@@ -28,16 +28,19 @@ services:
       EXECUTIONS_MODE: regular
       # Security settings
       N8N_SECURE_COOKIE: ${N8N_SECURE_COOKIE:-false}
+      N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: true
     ports:
       - "5678:5678"
     volumes:
       - /Volumes/Data/docker/n8n/data:/home/node/.n8n
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - shared_network
 
 volumes:
   n8n_data:
     driver: local
 
 networks:
-  n8n_network:
+  shared_network:
     external: true

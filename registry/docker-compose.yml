@@ -1,7 +1,8 @@
-version: '3.8'
 services:
   registry:
     image: registry:2.8.2
+    networks:
+      - shared_network
     ports:
       - "5050:5000"
     environment:
@@ -14,8 +15,10 @@ services:
     volumes:
       - /Volumes/Data/docker/registry/data:/var/lib/registry
   registry-ui:
-    image: joxit/docker-registry-ui:main
-    ports:
+    image: joxit/docker-registry-ui:latest
+    networks:
+      - shared_network
+    ports: 
       - "8080:80"
     environment:
       - SINGLE_REGISTRY=true
@@ -35,3 +38,7 @@ services:
     depends_on:
       - registry
     restart: always
+
+networks:
+  shared_network:
+    external: true

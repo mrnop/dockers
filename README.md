@@ -41,6 +41,28 @@ For detailed setup instructions, see [`n8n-docker/README.md`](n8n-docker/README.
 - Docker Engine 20.10+
 - Docker Compose v2.0+
 
+
+## 🌐 Shared Network Setup
+
+Some services are configured to use a shared Docker network called `shared_network` so they can communicate across different compose projects.
+
+**How to create and use the shared network:**
+
+1. Create the network (only needed once):
+   ```sh
+   docker compose -f shared-network.yml up
+   # or just create the network directly:
+   docker network create shared_network
+   ```
+   The file `shared-network.yml` is provided in the repo for convenience.
+
+2. Start your services as usual in their respective directories:
+   ```sh
+   docker compose up -d
+   ```
+
+All services using `shared_network` will be able to communicate with each other.
+
 ## 📋 General Usage
 
 1. Navigate to the desired configuration directory
